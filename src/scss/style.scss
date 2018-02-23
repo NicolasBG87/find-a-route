@@ -1,0 +1,127 @@
+// COLORS
+$grey-dark: rgb(38,42,46);
+$grey-light: rgb(49,53,60);
+$font-color: rgb(107,114,127);
+$green: rgb(52,180,94);
+$red: rgb(220,53,69);
+$blue: rgb(131,208,242);
+
+// FONT
+@import url('https://fonts.googleapis.com/css?family=Open+Sans:400,700');
+$font: 'Open Sans', sans-serif;
+
+// GLOBAL
+body {
+  background-color: $grey-light;
+  color: $font-color;
+}
+* {
+  font-family: $font;
+}
+h3 {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: $red;
+}
+i {
+  color: $blue;
+}
+
+// FORM
+.inputForm {
+  padding: 50px 30px;
+  background: $grey-dark;
+  border-radius: 5px;
+  max-width: 600px;
+  input {
+    border: none;
+    border-bottom: 2px solid $font-color;
+    background: none;
+    border-radius: 0;
+    color: #fff;
+    &:focus {
+      background: none;
+      color: #fff;
+    }
+  }
+  span {
+    background: none;
+    border: none;
+    border-bottom: 2px solid $font-color;
+    border-radius: 0;
+    color: #fff;
+  }
+  #showRoute {
+    padding: 15px 0;
+    text-transform: uppercase;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    background-color: $green;
+    &:hover {
+      cursor: pointer;
+      opacity: 0.7;
+    }
+  }
+}
+#mapModal {
+  height: 800px;
+  overflow: hidden !important;
+}
+#info {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 7px 0 7px;
+}
+
+// MAP
+#map {
+  height: 500px;
+  width: 450px;
+  padding: 10px;
+  margin: 0 auto;
+}
+
+// ALERTS
+.alert {
+  padding: 20px;
+  margin-top: 20px;
+  span {
+    border: 0;
+  }
+}
+
+// ROUTES HISTORY
+#routesHistory {
+  margin: 20px 0;
+  .card {
+    background-color: $grey-light;
+    color: #fff;
+  }
+  h5 {
+    text-transform: uppercase;
+    margin: 0;
+    span {
+      border: none;
+    }
+  }
+  .fa-road {
+    color: $green;
+    margin-left: 10px;
+    &:hover {
+      cursor: pointer;
+      opacity: 0.5;
+    }
+  }
+  .fa-times {
+    color: $red;
+    margin-left: 10px;
+    &:hover {
+      cursor: pointer;
+      opacity: 0.5;
+    }
+  }
+  .fa-chevron-right {
+    margin: 0 10px;
+  }
+}
