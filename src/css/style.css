@@ -1,0 +1,92 @@
+@import url("https://fonts.googleapis.com/css?family=Open+Sans:400,700");
+body {
+  background-color: #31353c;
+  color: #6b727f; }
+
+* {
+  font-family: "Open Sans", sans-serif; }
+
+h3 {
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #dc3545; }
+
+i {
+  color: #83d0f2; }
+
+.inputForm {
+  padding: 50px 30px;
+  background: #262a2e;
+  border-radius: 5px;
+  max-width: 600px; }
+  .inputForm input {
+    border: none;
+    border-bottom: 2px solid #6b727f;
+    background: none;
+    border-radius: 0;
+    color: #fff; }
+    .inputForm input:focus {
+      background: none;
+      color: #fff; }
+  .inputForm span {
+    background: none;
+    border: none;
+    border-bottom: 2px solid #6b727f;
+    border-radius: 0;
+    color: #fff; }
+  .inputForm #showRoute {
+    padding: 15px 0;
+    text-transform: uppercase;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    background-color: #34b45e; }
+    .inputForm #showRoute:hover {
+      cursor: pointer;
+      opacity: 0.7; }
+
+#mapModal {
+  height: 800px;
+  overflow: hidden !important; }
+
+#info {
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 7px 0 7px; }
+
+#map {
+  height: 500px;
+  width: 450px;
+  padding: 10px;
+  margin: 0 auto; }
+
+.alert {
+  padding: 20px;
+  margin-top: 20px; }
+  .alert span {
+    border: 0; }
+
+#routesHistory {
+  margin: 20px 0; }
+  #routesHistory .card {
+    background-color: #31353c;
+    color: #fff; }
+  #routesHistory h5 {
+    text-transform: uppercase;
+    margin: 0; }
+    #routesHistory h5 span {
+      border: none; }
+  #routesHistory .fa-road {
+    color: #34b45e;
+    margin-left: 10px; }
+    #routesHistory .fa-road:hover {
+      cursor: pointer;
+      opacity: 0.5; }
+  #routesHistory .fa-times {
+    color: #dc3545;
+    margin-left: 10px; }
+    #routesHistory .fa-times:hover {
+      cursor: pointer;
+      opacity: 0.5; }
+  #routesHistory .fa-chevron-right {
+    margin: 0 10px; }

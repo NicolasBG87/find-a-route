@@ -1,1 +1,2 @@
-# find-a-route-quantox
+# quantox-test-javascript
+Quantox interview test - vanilla JS
