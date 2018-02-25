@@ -125,7 +125,7 @@ function initMap(from, to) {
     zoom: 10,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     maxZoom: 15,
-    minZoom: 6
+    minZoom: 7
   });
 
   directionsDisplay.setMap(map);
