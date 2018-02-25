@@ -11,6 +11,7 @@ const handlers = {
   showRoute: () => {
     let start  = fromInput.value.toLowerCase();
     let finish = toInput.value.toLowerCase();
+    // IF NOTHING IS ENTERED
     if(start === "" || finish === "") {
       let alert = document.createElement("div");
       alert.classList = 'alert alert-danger';
@@ -21,14 +22,19 @@ const handlers = {
         </button>
       `;
       alertsBox.appendChild(alert);
+      // REMOVE ALERT AFTER 3 SECONDS
       handlers.alertTimeout();
     } else {
+      // UPDATE MODAL HEADER
       modalTitle.textContent = `Route from ${start.replace(/\b\w/g, l => l.toUpperCase())} to ${finish.replace(/\b\w/g, l => l.toUpperCase())}`;
+      // INITIALIZE GOOGLE MAP
       initMap(start, finish);
+      // RESET INPUT FIELDS
       fromInput.value = "";
       toInput.value = "";
     }
   },
+  // OPEN MODAL FROM HISTORY LIST
   openHistory: (e) => {
     let from = e.parentElement.previousSibling.previousSibling.previousSibling.previousSibling.previousSibling.textContent;
     let to = e.parentElement.previousSibling.textContent;
@@ -39,6 +45,7 @@ const handlers = {
     initMap(start, finish);
     $('#mapModal').modal('show');
   },
+  // REMOVE ITEM FROM HISTORY LIST
   removeHistory: (e) => {
     let from = e.parentElement.previousSibling.previousSibling.previousSibling.previousSibling.previousSibling.textContent;
     let to = e.parentElement.previousSibling.textContent;
@@ -46,6 +53,7 @@ const handlers = {
     handlers.removeFromLocalStorage(from, to);
     card.remove();
   },
+  // REMOVE ITEM FROM LOCAL STORAGE
   removeFromLocalStorage: (from, to) => {
     let savedData = JSON.parse(localStorage.getItem("history"));
     for(let i = 0; i < savedData.length; i++) {
@@ -55,11 +63,13 @@ const handlers = {
       }
     }
     if (savedData.length < 1){
+      // CLEARS LOCAL STORAGE TO MAKE IT EMPTY INSTEAD OF []
       localStorage.clear();
     } else {
       localStorage.setItem("history", JSON.stringify(savedData));
     }
   },
+  // ADD ITEM TO LOCAL STORAGE
   addToLocalStorage: (start, finish) => {
     let args = {
       from: start,
@@ -73,6 +83,8 @@ const handlers = {
       localStorage.setItem("history", JSON.stringify(history));
     } else {
       history = JSON.parse(localStorage.getItem("history"));
+      // CHECK IF QUERY ALREADY EXISTS IN LOCAL STORAGE
+      // TO PREVENT EQUAL QUERIES BEING ADDED TO LS AND HISTORY LIST
       history.forEach(data => {
         if (data.from == start && data.to == finish) {
           duplicate = args;
@@ -84,6 +96,7 @@ const handlers = {
       }
     } 
   },
+  // MAKE ALERT DISSAPEAR AFTER 3 SECONDS
   alertTimeout: () => {
     setTimeout(() => {
       $(".alert").fadeTo(500, 0).slideUp(500, function(){
@@ -91,7 +104,9 @@ const handlers = {
       });
     }, 3000)
   },
+  // DISPLAY LOCAL STORAGE DATA IN HISTORY LIST
   displayHistory: () => {
+    // IF EMPTY, ALERT THE USER
     if (localStorage.getItem("history") === null) {
       let alert = document.createElement("div");
       alert.classList = 'alert alert-warning';
@@ -124,14 +139,16 @@ function initMap(from, to) {
   let directionsService = new google.maps.DirectionsService();
   let directionsDisplay = new google.maps.DirectionsRenderer();
   let map = new google.maps.Map(document.getElementById('map'), {
+    // MAP CONFIGURATION
     zoom: 10,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     maxZoom: 15,
     minZoom: 7
   });
-
+  // INJECT MAP
   directionsDisplay.setMap(map);
 
+  // DIRECTIONS CONFIG
   let request = {
     origin: String(from), 
     destination: String(to),
@@ -141,19 +158,21 @@ function initMap(from, to) {
 
   directionsService.route(request, function(response, status) {
     if (status == google.maps.DirectionsStatus.OK) {
-      // Display the distance:
+      // DISPLAY THE DISTANCE
       document.getElementById('distance').textContent = "Distance: " +
       Math.round(response.routes[0].legs[0].distance.value / 1000) + " km";
 
-      // Display the duration:
+      // DISPLAY THE DURATION
       document.getElementById('duration').textContent = "Duration: " + 
       Math.round(response.routes[0].legs[0].duration.value / 60) + " minutes";
 
       directionsDisplay.setDirections(response);
       handlers.addToLocalStorage(from, to);
       handlers.displayHistory();
+      // SHOW MODAL IF QUERY IS ALLOWED
       $("#mapModal").modal("show");
     } else {
+      // DISPLAY ALERT IF QUERY IS REJECTED
       let alert = document.createElement("div");
       alert.classList = 'alert alert-warning';
       alert.setAttribute("role", "alert");
@@ -173,4 +192,5 @@ showRouteBtn.addEventListener('click', () => {
   handlers.showRoute();
   handlers.alertTimeout();
 });
+// SHOW LOCAL STORAGE DATA ON PAGE LOAD
 document.addEventListener("DOMContentLoaded", handlers.displayHistory);
