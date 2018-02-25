@@ -8,7 +8,7 @@ let fromInput = document.querySelector("#fromInput"),
 
 // HANDLERS
 const handlers = {
-  showRoute: (from, to) => {
+  showRoute: () => {
     let start  = fromInput.value;
     let finish = toInput.value;
     if(start === "" || finish === "") {
@@ -18,15 +18,13 @@ const handlers = {
       alert.innerHTML = `
         Please fill in the fields.<button type="button" class="close" data-dismiss="alert" aria-label="Close">
         <span aria-hidden="true" style="color: black">&times;</span>
-      </button>
+        </button>
       `;
       alertsBox.appendChild(alert);
       handlers.alertTimeout();
-      showRouteBtn.removeAttribute("data-toggle");
     } else {
       modalTitle.textContent = `Route from ${start} to ${finish}`;
       initMap(start, finish);
-      handlers.addToLocalStorage(start, finish);
       fromInput.value = "";
       toInput.value = "";
     }
@@ -50,7 +48,7 @@ const handlers = {
   },
   removeFromLocalStorage: (from, to) => {
     let savedData = JSON.parse(localStorage.getItem("history"));
-    for(var i=0; i < savedData.length; i++) {
+    for(let i = 0; i < savedData.length; i++) {
       if(savedData[i].from === from && savedData[i].to === to)
       {
         savedData.splice(i,1);
@@ -67,35 +65,21 @@ const handlers = {
       from: start,
       to: finish
     };
-    let newData = [];
-    if(start === "" || finish === "") {
-      let alert = document.createElement("div");
-      alert.classList = 'alert alert-danger';
-      alert.setAttribute("role", "alert");
-      alert.innerHTML = `
-        Please fill in the fields.<button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true" style="color: black">&times;</span>
-      </button>
-      `;
-      alertsBox.appendChild(alert);
-      handlers.alertTimeout();
-      showRouteBtn.removeAttribute("data-toggle");
+    let history = [];
+
+    if (localStorage.getItem("history") === null) {
+      history.push(args);
+      localStorage.setItem("history", JSON.stringify(history));
     } else {
-      showRouteBtn.setAttribute("data-toggle", "modal");
-      if (localStorage.getItem("history") === null) {
-        newData.push(args);
-        localStorage.setItem("history", JSON.stringify(newData));
-      } else {
-        let savedData = JSON.parse(localStorage.getItem("history"));
-        for (data in savedData) {
-          if (data.from === start && data.to === finish) {
-            return null;
-          } else {
-            savedData.push(args);
-            localStorage.setItem("history", JSON.stringify(savedData));
-          }
-        };
-      }  
+      history = JSON.parse(localStorage.getItem("history"));
+      for (data in history) {
+        if (data.from === start && data.to === finish) {
+          return null;
+        } else {
+          history.push(args);
+          localStorage.setItem("history", JSON.stringify(history));
+        }
+      };
     }  
   },
   alertTimeout: () => {
@@ -141,7 +125,7 @@ function initMap(from, to) {
     zoom: 10,
     mapTypeId: google.maps.MapTypeId.ROADMAP,
     maxZoom: 15,
-    minZoom: 8
+    minZoom: 6
   });
 
   directionsDisplay.setMap(map);
@@ -164,6 +148,20 @@ function initMap(from, to) {
       Math.round(response.routes[0].legs[0].duration.value / 60) + " minutes";
 
       directionsDisplay.setDirections(response);
+      handlers.addToLocalStorage(from, to);
+      handlers.displayHistory();
+      $("#mapModal").modal("show");
+    } else {
+      let alert = document.createElement("div");
+      alert.classList = 'alert alert-warning';
+      alert.setAttribute("role", "alert");
+      alert.innerHTML = `
+        There's no such a query.<button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true" style="color: black">&times;</span>
+      </button>
+      `;
+      alertsBox.appendChild(alert);
+      handlers.alertTimeout();
     }
   });
 }
@@ -171,7 +169,6 @@ function initMap(from, to) {
 // EVENT LISTENERS
 showRouteBtn.addEventListener('click', () => {
   handlers.showRoute();
-  handlers.displayHistory();
   handlers.alertTimeout();
 });
 document.addEventListener("DOMContentLoaded", handlers.displayHistory);
