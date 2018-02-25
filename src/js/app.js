@@ -23,7 +23,7 @@ const handlers = {
       alertsBox.appendChild(alert);
       handlers.alertTimeout();
     } else {
-      modalTitle.textContent = `Route from ${start} to ${finish}`;
+      modalTitle.textContent = `Route from ${start.replace(/\b\w/g, l => l.toUpperCase())} to ${finish.replace(/\b\w/g, l => l.toUpperCase())}`;
       initMap(start, finish);
       fromInput.value = "";
       toInput.value = "";
@@ -35,7 +35,7 @@ const handlers = {
     handlers.openModal(from, to);
   },
   openModal: (start, finish) => {
-    modalTitle.textContent = `Route from ${start} to ${finish}`;
+    modalTitle.textContent = `Route from ${start.replace(/\b\w/g, l => l.toUpperCase())} to ${finish.replace(/\b\w/g, l => l.toUpperCase())}`;
     initMap(start, finish);
     $('#mapModal').modal('show');
   },
