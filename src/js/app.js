@@ -9,8 +9,8 @@ let fromInput = document.querySelector("#fromInput"),
 // HANDLERS
 const handlers = {
   showRoute: () => {
-    let start  = fromInput.value;
-    let finish = toInput.value;
+    let start  = fromInput.value.toLowerCase();
+    let finish = toInput.value.toLowerCase();
     if(start === "" || finish === "") {
       let alert = document.createElement("div");
       alert.classList = 'alert alert-danger';
@@ -66,21 +66,23 @@ const handlers = {
       to: finish
     };
     let history = [];
+    let duplicate;
 
     if (localStorage.getItem("history") === null) {
       history.push(args);
       localStorage.setItem("history", JSON.stringify(history));
     } else {
       history = JSON.parse(localStorage.getItem("history"));
-      for (data in history) {
-        if (data.from === start && data.to === finish) {
-          return null;
-        } else {
-          history.push(args);
-          localStorage.setItem("history", JSON.stringify(history));
+      history.forEach(data => {
+        if (data.from == start && data.to == finish) {
+          duplicate = args;
         }
-      };
-    }  
+      });
+      if(!duplicate) {
+        history.push(args);
+        localStorage.setItem("history", JSON.stringify(history));
+      }
+    } 
   },
   alertTimeout: () => {
     setTimeout(() => {
